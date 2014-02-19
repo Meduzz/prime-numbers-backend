@@ -17,7 +17,7 @@ object Start {
     val server = conf.getString("my.server.host")
     val port = conf.getInt("my.server.port")
     val inQueName = conf.getString("my.server.queue.in")
-    val outQueyName = conf.getString("my.server.queue.out")
+    val outQueName = conf.getString("my.server.queue.out")
 
     // get a amqp channel
     val channel = AmqpWrapper(server, port).channel()
@@ -26,7 +26,7 @@ object Start {
     channel.withChannel { chan =>
       chan.exchangeDeclare("test", "direct", false)
       chan.queueDeclare(inQueName, false, false, false, null)
-      chan.queueDeclare(outQueyName, false, false, false, null)
+      chan.queueDeclare(outQueName, false, false, false, null)
       chan.queueBind(inQueName, "test", "in")
       chan.queueBind(outQueName, "test", "out")
     }

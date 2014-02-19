@@ -6,6 +6,8 @@ import se.kodiak.primes.backend.amqp.AmqpWrapper
 import com.typesafe.config.ConfigFactory
 import org.json4s._
 import org.json4s.native.JsonMethods._
+import org.json4s.native.Serialization
+import org.json4s.native.Serialization.{read, write}
 
 class PrimeNumberActor extends Actor with ActorLogging {
   val conf = ConfigFactory.load()
@@ -14,6 +16,7 @@ class PrimeNumberActor extends Actor with ActorLogging {
   val outQueyName = conf.getString("my.server.queue.out")
 
   val channel = AmqpWrapper(server, port).channel()
+  implicit val formats = Serialization.formats(NoTypeHints)
 
   def receive = {
     case m:Calculate => {
@@ -29,7 +32,7 @@ class PrimeNumberActor extends Actor with ActorLogging {
       if (result == 1) {
         // log and spam
         log.info(s"Found a prime (${m.number})")
-        channel.send("test", "out", compact(render(m)).getBytes("utf-8"))
+        channel.send("test", "out", write(m))
       }
     }
   }
