@@ -32,7 +32,7 @@ class PrimeNumberActor extends Actor with ActorLogging {
       if (result == 1) {
         // log and spam
         log.info(s"Found a prime (${m.number})")
-        channel.send("test", "out", write(m))
+        channel.send("test", m.key, write(m))
       }
     }
   }

@@ -6,7 +6,4 @@ object Messages {
   case class StartCalculation(min:Long, max:Long, key:String)
   case class Calculate(key:String, number:Long)
   case class Listen(server:String, port:Int, queName:String)
-
-
-  implicit def jstring2Long(value:JString):Long = value.values.toLong
 }
